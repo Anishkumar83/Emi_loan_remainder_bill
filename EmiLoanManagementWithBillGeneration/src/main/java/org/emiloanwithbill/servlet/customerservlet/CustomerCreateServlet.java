@@ -89,6 +89,11 @@ public class CustomerCreateServlet extends HttpServlet {
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().write("Customer updated");
     }
-    private void deleteCustomer(HttpServletRequest req, HttpServletResponse resp) throws IOException {}
+    private void deleteCustomer(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        long customerId = Long.parseLong(req.getParameter("id"));
+        customerService.deleteCustomer(customerId);
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().write("Customer deleted successfully");
+    }
 
 }

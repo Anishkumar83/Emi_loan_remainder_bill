@@ -24,8 +24,10 @@ public class CustomerDao {
     public static final int DOB_INDEX = 4;
     public static final int ADDRESS_INDEX = 5;
     public static final int GENDER_INDEX = 6;
-
     public static final int CUSTOMER_ID_INDEX = 7;
+
+    public static final int GET_CUSTOMER_ID_IDX=1;
+    public static final int DELETE_CUSTOMER_ID_IDX=1;
 
     String insert = """
             INSERT INTO customers (firstName, lastName, email, dob, address, gender)
@@ -106,7 +108,7 @@ public class CustomerDao {
     public Customer getByCustomerId(Long customerId){
         try(Connection con=DbConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(getById)) {
-            ps.setLong(1,customerId);
+            ps.setLong(GET_CUSTOMER_ID_IDX,customerId);
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -149,5 +151,24 @@ public class CustomerDao {
             LOGGER.error("update failed.",e);
             throw new DataException("Update failed.", e);
         }
+    }
+
+    public void delete(Long customerId){
+        try(Connection con= DbConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(delete)){
+            ps.setLong(DELETE_CUSTOMER_ID_IDX,customerId);
+
+            int rowsAffected = ps.executeUpdate();
+
+            if(rowsAffected ==0){
+                LOGGER.info("No customer found with id={}",customerId);
+            }else{
+                LOGGER.info("Customer deleted successfully with id={}",customerId);
+            }
+
+        }catch (Exception e){
+            throw new DataException("Delete failed ",e);
+        }
+
     }
 }
