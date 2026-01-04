@@ -3,7 +3,7 @@ package org.emiloanwithbill.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.emiloanwithbill.enums.Gender;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 
 public class Customer {
@@ -12,7 +12,7 @@ public class Customer {
     private String lastName;
     private String email;
     @JsonFormat(shape =  JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
-    private Date dob;
+    private LocalDate dob;
     private String address;
     private Gender gender;
 
@@ -20,7 +20,7 @@ public class Customer {
     }
 
     public Customer(long customerId, String firstName, String lastName,
-                    String email, Date dob, String address, Gender gender) {
+                    String email, LocalDate dob, String address, Gender gender) {
         this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -62,11 +62,11 @@ public class Customer {
         this.email = email;
     }
 
-    public Date getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 

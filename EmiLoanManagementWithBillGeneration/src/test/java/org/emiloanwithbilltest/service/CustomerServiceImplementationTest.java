@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
@@ -34,13 +34,13 @@ class CustomerServiceImplementationTest {
         customer.setFirstName("Anish");
         customer.setLastName("Kumar");
         customer.setEmail("ak@gmail.com");
-        customer.setDob(Date.valueOf("2001-01-01"));
+        customer.setDob(LocalDate.of(1980, 1, 1));
         customer.setAddress("Chennai");
         customer.setGender(Gender.MALE);
     }
 
     @Test
-    void testAddCustomer_callsDaoInsert() {
+    void testAddCustomerCallsDaoInsert() {
 
         customerService.addCustomer(customer);
 

@@ -9,15 +9,16 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DbConnection {
+public final class DbConnection {
 
     private static final HikariDataSource dataSource;
+    private static final int MAX_POOL_SIZE=10;
+    private static final int MIN_IDLE =5;
 
     private DbConnection() {}
 
     static {
         try {
-            Properties prop = new Properties();
             InputStream input = Thread.currentThread()
                     .getContextClassLoader()
                     .getResourceAsStream("db.properties");
@@ -25,6 +26,8 @@ public class DbConnection {
             if (input == null) {
                 throw new DataException("db.properties not found in classpath");
             }
+
+            Properties prop = new Properties();
 
             prop.load(input);
 
@@ -35,8 +38,8 @@ public class DbConnection {
 
             config.setDriverClassName("org.postgresql.Driver");
 
-            config.setMaximumPoolSize(10);
-            config.setMinimumIdle(5);
+            config.setMaximumPoolSize(MAX_POOL_SIZE);
+            config.setMinimumIdle(MIN_IDLE);
 
             dataSource = new HikariDataSource(config);
 

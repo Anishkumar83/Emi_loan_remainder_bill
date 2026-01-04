@@ -7,17 +7,14 @@ import org.emiloanwithbill.model.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class CustomerDao {
 
-    static final Logger LOGGER = LoggerFactory.getLogger(CustomerDao.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerDao.class);
     public static final int FIRSTNAME_INDEX = 1;
     public static final int LASTNAME_INDEX = 2;
     public static final int EMAIL_INDEX = 3;
@@ -30,41 +27,49 @@ public class CustomerDao {
     public static final int DELETE_CUSTOMER_ID_IDX=1;
 
     String insert = """
-            INSERT INTO customers (firstName, lastName, email, dob, address, gender)
-            VALUES (?, ?, ?, ?, ?, ?)
-            """;
+    INSERT INTO customers ("firstName", "lastName", "email", "dob", "address", "gender")
+    VALUES (?, ?, ?, ?, ?, ?)
+    """;
+
 
     String selectAll = """
-            SELECT * FROM customers
-            """;
+    SELECT "customerId", "firstName", "lastName", "email", "dob", "address", "gender"
+    FROM customers
+    
+    """;
 
     String getById = """
-            SELECT * FROM customers
-            WHERE customerId = ?
-            """;
+    SELECT "customerId", "firstName", "lastName", "email", "dob", "address", "gender" FROM customers
+    WHERE "customerId" = ?
+    """;
+
 
     String update = """
-            UPDATE customers set
-            firstName = ?,
-            lastName = ?,
-            email = ?,
-            dob = ?,
-            address = ?
-            WHERE customerId = ?
-            """;
+    UPDATE customers SET
+    "firstName" = ?,
+    "lastName" = ?,
+    "email" = ?,
+    "dob" = ?,
+    "address" = ?,
+    "gender" = ?
+    WHERE "customerId" = ?
+    """;
+
 
     String delete = """
-            DELETE FROM customers WHERE id = ?
-            """;
+    DELETE FROM customers WHERE "customerId" = ?
+    """;
+
 
     public void insert(Customer customer) {
+        LOGGER.info("Inside insert function in dao");
         try (Connection con = DbConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(insert)) {
 
             ps.setString(FIRSTNAME_INDEX, customer.getFirstName());
             ps.setString(LASTNAME_INDEX, customer.getLastName());
             ps.setString(EMAIL_INDEX, customer.getEmail());
-            ps.setDate(DOB_INDEX, customer.getDob());
+            ps.setDate(DOB_INDEX, Date.valueOf(customer.getDob()));
             ps.setString(ADDRESS_INDEX, customer.getAddress());
             ps.setString(GENDER_INDEX, customer.getGender().name());
 
@@ -80,6 +85,7 @@ public class CustomerDao {
     }
 
     public List<Customer> getAll(){
+        LOGGER.info("Inside getAll function in dao");
         List<Customer> customers = new ArrayList<>();
         try (Connection con = DbConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(selectAll)) {
@@ -90,7 +96,7 @@ public class CustomerDao {
                 customer.setFirstName(rs.getString("firstName"));
                 customer.setLastName(rs.getString("lastName"));
                 customer.setEmail(rs.getString("email"));
-                customer.setDob(rs.getDate("dob"));
+                customer.setDob(rs.getDate("dob").toLocalDate());
                 customer.setAddress(rs.getString("address"));
                 customer.setGender(Gender.valueOf(rs.getString("gender")));
 
@@ -106,6 +112,7 @@ public class CustomerDao {
     }
 
     public Customer getByCustomerId(Long customerId){
+        LOGGER.info("Inside getByCustomerId function in dao");
         try(Connection con=DbConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(getById)) {
             ps.setLong(GET_CUSTOMER_ID_IDX,customerId);
@@ -117,7 +124,7 @@ public class CustomerDao {
                 customer.setFirstName(rs.getString("firstName"));
                 customer.setLastName(rs.getString("lastName"));
                 customer.setEmail(rs.getString("email"));
-                customer.setDob(rs.getDate("dob"));
+                customer.setDob(rs.getDate("dob").toLocalDate());
                 customer.setAddress(rs.getString("address"));
                 customer.setGender(Gender.valueOf(rs.getString("gender")));
                 return customer;
@@ -130,12 +137,13 @@ public class CustomerDao {
     }
 
     public void update(Customer customer) {
+        LOGGER.info("Inside update function in dao");
         try(Connection con=DbConnection.getConnection();
         PreparedStatement ps= con.prepareStatement(update)){
             ps.setString(FIRSTNAME_INDEX, customer.getFirstName());
             ps.setString(LASTNAME_INDEX, customer.getLastName());
             ps.setString(EMAIL_INDEX, customer.getEmail());
-            ps.setDate(DOB_INDEX, customer.getDob());
+            ps.setDate(DOB_INDEX, Date.valueOf(customer.getDob()));
             ps.setString(ADDRESS_INDEX, customer.getAddress());
             ps.setString(GENDER_INDEX, customer.getGender().name());
             ps.setLong(CUSTOMER_ID_INDEX,customer.getCustomerId());
@@ -148,12 +156,13 @@ public class CustomerDao {
                 LOGGER.info("Customer updated successfully.");
             }
         }catch(SQLException e){
-            LOGGER.error("update failed.",e);
-            throw new DataException("Update failed.", e);
+            LOGGER.error("update failed to id={}",customer.getCustomerId(),e);
+            throw new DataException("Update failed."+customer.getCustomerId(), e);
         }
     }
 
     public void delete(Long customerId){
+        LOGGER.info("Inside delete function in dao");
         try(Connection con= DbConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(delete)){
             ps.setLong(DELETE_CUSTOMER_ID_IDX,customerId);
