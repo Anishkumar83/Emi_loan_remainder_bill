@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="001" author="anishKumar">
+
+        <createTable tableName="loan">
+
+            <column name="loanId" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"
+                             primaryKeyName="pk_loan"
+                             nullable="false"/>
+            </column>
+
+            <column name="customerId" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="principal" type="NUMERIC(12,2)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="interestRate" type="NUMERIC(5,2)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="tenureMonths" type="INTEGER"/>
+
+            <column name="created_at" type="TIMESTAMP"
+                    defaultValueComputed="CURRENT_TIMESTAMP"/>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="loan"
+                baseColumnNames="customerId"
+                constraintName="fk_loan_customer"
+                referencedTableName="customers"
+                referencedColumnNames="customerId"
+                onDelete="RESTRICT"
+                onUpdate="CASCADE"/>
+
+
+
+    </changeSet>
+
+</databaseChangeLog>

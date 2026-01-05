@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="003" author="anishKumar">
+
+        <createTable tableName="emi_schedule">
+
+            <column name="emiId" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"
+                             primaryKeyName="pk_emi"
+                             nullable="false"/>
+            </column>
+
+            <column name="loanId" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="emi_amount" type="DECIMAL(15,2)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="interest_component" type="DECIMAL(15,2)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="principal_component" type="DECIMAL(15,2)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="outstanding_balance" type="DECIMAL(15,2)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="due_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at"
+                    type="TIMESTAMP"
+                    defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="emi_schedule"
+                baseColumnNames="loanId"
+                referencedTableName="loan"
+                referencedColumnNames="loanId"
+                constraintName="fk_emi_loan"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+
+        <createIndex
+                tableName="emi_schedule"
+                indexName="idx_emi_loanId">
+            <column name="loanId"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

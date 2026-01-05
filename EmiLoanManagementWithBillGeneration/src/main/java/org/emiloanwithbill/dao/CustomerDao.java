@@ -105,7 +105,6 @@ public class CustomerDao {
             LOGGER.info("All customers retrieved successfully.");
 
         } catch (SQLException e) {
-            LOGGER.error("All customers retrieval failed.", e);
             throw new DataException("All customers retrieved failed.", e);
         }
         return customers;
@@ -156,7 +155,6 @@ public class CustomerDao {
                 LOGGER.info("Customer updated successfully.");
             }
         }catch(SQLException e){
-            LOGGER.error("update failed to id={}",customer.getCustomerId(),e);
             throw new DataException("Update failed."+customer.getCustomerId(), e);
         }
     }

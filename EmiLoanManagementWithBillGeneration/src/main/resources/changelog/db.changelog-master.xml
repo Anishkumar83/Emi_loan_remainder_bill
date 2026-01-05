@@ -7,5 +7,7 @@
             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
     <include file="src/main/resources/changelog/create-customer-table.xml"/>
+    <include file="src/main/resources/changelog/create-loan-table.xml"/>
+    <include file="src/main/resources/changelog/create-emi_schedule-table.xml"/>
 
 </databaseChangeLog>
