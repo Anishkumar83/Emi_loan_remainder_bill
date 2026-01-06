@@ -25,8 +25,18 @@ public class LoanServiceImplementation implements LoanService {
 
     private static final int SCALE = 2;
 
-    private final LoanDao loanDao = new LoanDao();
-    private final EmiDao emiDao = new EmiDao();
+    private final LoanDao loanDao;
+    private final EmiDao emiDao;
+
+    public LoanServiceImplementation() {
+        this.loanDao = new LoanDao();
+        this.emiDao = new EmiDao();
+    }
+
+    public LoanServiceImplementation(LoanDao loanDao, EmiDao emiDao) {
+        this.loanDao = loanDao;
+        this.emiDao = emiDao;
+    }
 
     @Override
     public long createLoan(long customerId,
@@ -73,7 +83,7 @@ public class LoanServiceImplementation implements LoanService {
     }
 
 
-    private void validate(long customerId,
+    private static void validate(long customerId,
                           BigDecimal principal,
                           BigDecimal rate,
                           int months) {
@@ -121,9 +131,9 @@ public class LoanServiceImplementation implements LoanService {
             Emi emi = new Emi();
             emi.setLoanId(loanId);
             emi.setEmiAmount(emiAmount.doubleValue());
-            emi.setInterest_component(interest.doubleValue());
-            emi.setPrincipal_component(principalPaid.doubleValue());
-            emi.setOutstanding_balance(balance.doubleValue());
+            emi.setInterestComponent(interest.doubleValue());
+            emi.setPrincipalComponent(principalPaid.doubleValue());
+            emi.setOutstandingBalance(balance.doubleValue());
             emi.setDueDate(dueDate);
             emi.setStatus("PENDING");
 
@@ -132,28 +142,34 @@ public class LoanServiceImplementation implements LoanService {
         }
     }
 
-    private void rollback(Connection con) {
+    private static void rollback(Connection con) {
         try {
-            if (con != null) con.rollback();
+            if (con != null) {
+                con.rollback();
+            }
         } catch (SQLException e) {
             throw new DataException("Rollback failed", e);
         }
     }
 
-    private void close(Connection con) {
+
+    private static void close(Connection con) {
         try {
-            if (con != null) con.close();
+            if (con != null) {
+                con.close();
+            }
         } catch (SQLException e) {
             throw new DataException("Close failed", e);
         }
     }
+
 
     @Override
     public Loan getLoanById(long loanId) {
         try (Connection con = DbConnection.getConnection()) {
             return loanDao.getByLoanId(con, loanId);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch loan", e);
+            throw new DataException("Failed to fetch loan", e);
         }
     }
 
@@ -162,7 +178,7 @@ public class LoanServiceImplementation implements LoanService {
         try (Connection con = DbConnection.getConnection()) {
             return emiDao.getEmiByLoanId(con, loanId);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch EMI schedule", e);
+            throw new DataException("Failed to fetch EMI schedule", e);
         }
     }
 

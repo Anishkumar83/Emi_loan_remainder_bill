@@ -1,0 +1,17 @@
+2026-01-05 22:57:41 INFO  org.emiloanwithbill.dao.CustomerDao - Inside insert function in dao
+2026-01-05 22:57:41 INFO  org.emiloanwithbill.dao.CustomerDao - Inside insert function in dao
+2026-01-05 22:57:41 INFO  org.emiloanwithbill.dao.CustomerDao - Customer inserted successfully.
+2026-01-05 23:03:20 INFO  org.emiloanwithbill.dao.CustomerDao - Inside insert function in dao
+2026-01-05 23:03:20 INFO  org.emiloanwithbill.dao.CustomerDao - Customer inserted successfully.
+2026-01-05 23:05:05 INFO  org.emiloanwithbill.dao.CustomerDao - Inside insert function in dao
+2026-01-05 23:05:05 INFO  org.emiloanwithbill.dao.CustomerDao - Inside insert function in dao
+2026-01-05 23:05:05 INFO  org.emiloanwithbill.dao.CustomerDao - Customer inserted successfully.
+2026-01-05 23:26:54 INFO  org.emiloanwithbill.dao.CustomerDao - Inside insert function in dao
+2026-01-05 23:26:54 INFO  org.emiloanwithbill.dao.CustomerDao - Inside insert function in dao
+2026-01-05 23:26:54 INFO  org.emiloanwithbill.dao.CustomerDao - Customer inserted successfully.
+2026-01-05 23:27:23 INFO  org.emiloanwithbill.dao.CustomerDao - Inside insert function in dao
+2026-01-05 23:27:23 INFO  org.emiloanwithbill.dao.CustomerDao - Inside insert function in dao
+2026-01-05 23:27:23 INFO  org.emiloanwithbill.dao.CustomerDao - Customer inserted successfully.
+2026-01-05 23:39:32 INFO  org.emiloanwithbill.dao.CustomerDao - Inside insert function in dao
+2026-01-05 23:39:32 INFO  org.emiloanwithbill.dao.CustomerDao - Inside insert function in dao
+2026-01-05 23:39:32 INFO  org.emiloanwithbill.dao.CustomerDao - Customer inserted successfully.

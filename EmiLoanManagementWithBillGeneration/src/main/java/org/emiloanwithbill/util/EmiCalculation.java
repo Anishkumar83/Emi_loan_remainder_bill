@@ -7,6 +7,8 @@ import java.math.RoundingMode;
 public class EmiCalculation {
     private static final int SCALE =2;
 
+    private EmiCalculation() {}
+
     //EMI = principal*monthlyRate*(1+monthlyRate)^tenureMonths /(1+monthlyRate)^tenureMonths
 
     public static BigDecimal emiCalculation(BigDecimal principal,

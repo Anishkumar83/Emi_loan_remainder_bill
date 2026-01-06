@@ -25,83 +25,115 @@ public class CustomerServlet extends HttpServlet {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(CustomerServlet.class);
 
-    private final CustomerService customerService =
-            new CustomerServiceImplementation(new CustomerDao());
+    private final CustomerService customerService;
+
+    public CustomerServlet() {
+        this.customerService =
+                new CustomerServiceImplementation(new CustomerDao());
+    }
+
+    public CustomerServlet(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
 
     @Override
-    protected void doPost(HttpServletRequest req,
-                          HttpServletResponse resp)
-            throws IOException {
-
+    public void doPost(HttpServletRequest req,
+                       HttpServletResponse resp) {
         LOGGER.info("POST /customer");
 
-        Customer customer =
-                JsonUtil.getMapper().readValue(req.getReader(), Customer.class);
+        try {
+            Customer customer =
+                    JsonUtil.getMapper().readValue(req.getReader(), Customer.class);
 
-        customerService.addCustomer(customer);
+            customerService.addCustomer(customer);
 
-        resp.setStatus(HttpServletResponse.SC_CREATED);
-        resp.getWriter().write("Customer created successfully");
+            resp.setStatus(HttpServletResponse.SC_CREATED);
+            resp.getWriter().write("Customer created successfully");
+        } catch (IOException e) {
+            LOGGER.error("Error processing POST /customer", e);
+            try {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request body");
+            } catch (IOException ex) {
+                LOGGER.error("Error processing POST /customer", ex);
+            }
+        }
     }
 
     @Override
-    protected void doGet(HttpServletRequest req,
-                         HttpServletResponse resp)
-            throws IOException {
-
-        String idParam = req.getParameter("id");
+    public void doGet(HttpServletRequest req,
+                      HttpServletResponse resp) {
         resp.setContentType("application/json");
 
-        if (idParam == null) {
-           
-            List<Customer> customers = customerService.getAll();
-            JsonUtil.getMapper().writeValue(resp.getWriter(), customers);
-            return;
+        try {
+            String idParam = req.getParameter("id");
+
+            if (idParam == null) {
+                List<Customer> customers = customerService.getAll();
+                JsonUtil.getMapper().writeValue(resp.getWriter(), customers);
+                return;
+            }
+
+            long id = Long.parseLong(idParam);
+            Customer customer = customerService.getCustomerById(id);
+
+            if (customer == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Customer not found");
+                return;
+            }
+
+            JsonUtil.getMapper().writeValue(resp.getWriter(), customer);
+        } catch (IOException | NumberFormatException e) {
+            LOGGER.error("Error processing GET /customer", e);
+            try {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request");
+            } catch (IOException ex) {
+                LOGGER.error("Error processing GET /customer", ex);
+            }
         }
-
-
-        long id = Long.parseLong(idParam);
-        Customer customer = customerService.getCustomerById(id);
-
-        if (customer == null) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND,
-                    "Customer not found");
-            return;
-        }
-
-        JsonUtil.getMapper().writeValue(resp.getWriter(), customer);
     }
 
-
     @Override
-    protected void doPut(HttpServletRequest req,
-                         HttpServletResponse resp)
-            throws IOException {
-
+    public void doPut(HttpServletRequest req,
+                      HttpServletResponse resp) {
         LOGGER.info("PUT /customer");
 
-        Customer customer =
-                JsonUtil.getMapper().readValue(req.getReader(), Customer.class);
+        try {
+            Customer customer =
+                    JsonUtil.getMapper().readValue(req.getReader(), Customer.class);
 
-        customerService.updateCustomer(customer);
+            customerService.updateCustomer(customer);
 
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write("Customer updated successfully");
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write("Customer updated successfully");
+        } catch (IOException e) {
+            LOGGER.error("Error processing PUT /customer", e);
+            try {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request body");
+            } catch (IOException ex) {
+                LOGGER.error("Error processing PUT /customer", ex);
+            }
+        }
     }
 
-
     @Override
-    protected void doDelete(HttpServletRequest req,
-                            HttpServletResponse resp)
-            throws IOException {
-
+    public void doDelete(HttpServletRequest req,
+                         HttpServletResponse resp) {
         LOGGER.info("DELETE /customer");
 
-        long id = Long.parseLong(req.getParameter("id"));
-        customerService.deleteCustomer(id);
+        try {
+            long id = Long.parseLong(req.getParameter("id"));
+            customerService.deleteCustomer(id);
 
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write("Customer deleted successfully");
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write("Customer deleted successfully");
+        } catch (IOException | NumberFormatException e) {
+            LOGGER.error("Error processing DELETE /customer", e);
+            try {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request");
+            } catch (IOException ex) {
+                LOGGER.error("Error processing DELETE /customer", ex);
+            }
+        }
     }
 }

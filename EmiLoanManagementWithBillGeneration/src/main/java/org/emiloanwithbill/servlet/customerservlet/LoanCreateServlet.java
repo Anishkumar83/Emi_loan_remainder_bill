@@ -24,11 +24,22 @@ public class LoanCreateServlet extends HttpServlet {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(LoanCreateServlet.class);
 
-    private final LoanService loanService = new LoanServiceImplementation();
+    private static final String MISSING_PARAMETER="Missing parameter: ";
+
+    private final LoanService loanService ;
+
+    public LoanCreateServlet() {
+        this.loanService = new LoanServiceImplementation();
+    }
+
+    public LoanCreateServlet(LoanService loanService) {
+        this.loanService = loanService;
+    }
+
 
     @Override
-    protected void doPost(HttpServletRequest req,
-                          HttpServletResponse resp)
+    public void doPost(HttpServletRequest req,
+                       HttpServletResponse resp)
             throws ServletException, IOException {
 
         LOGGER.info("Loan create request received");
@@ -71,29 +82,29 @@ public class LoanCreateServlet extends HttpServlet {
 
 
 
-    private long parseLong(HttpServletRequest req, String param) {
+    private static long parseLong(HttpServletRequest req, String param) {
         String value = req.getParameter(param);
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException(
-                    "Missing parameter: " + param);
+                    MISSING_PARAMETER + param);
         }
         return Long.parseLong(value);
     }
 
-    private int parseInt(HttpServletRequest req, String param) {
+    private static int parseInt(HttpServletRequest req, String param) {
         String value = req.getParameter(param);
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException(
-                    "Missing parameter: " + param);
+                    MISSING_PARAMETER + param);
         }
         return Integer.parseInt(value);
     }
 
-    private BigDecimal parseBigDecimal(HttpServletRequest req, String param) {
+    private static BigDecimal parseBigDecimal(HttpServletRequest req, String param) {
         String value = req.getParameter(param);
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException(
-                    "Missing parameter: " + param);
+                    MISSING_PARAMETER+ param);
         }
         return new BigDecimal(value);
     }

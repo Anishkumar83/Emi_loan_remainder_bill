@@ -25,7 +25,8 @@ public class EmiDao {
     private static final int DUE_DATE_INDEX = 6;
     private static final int STATUS_INDEX = 7;
 
-
+    private static final int UPDATE_LOAN_STATUS_IDX = 1;
+    private static final int UPDATE_LOAN_EMIID_IDX = 2;
 
 
 
@@ -62,9 +63,9 @@ public class EmiDao {
 
             ps.setLong(LOAN_ID_INDEX, emi.getLoanId());
             ps.setDouble(EMI_AMOUNT_INDEX, emi.getEmiAmount());
-            ps.setDouble(INTEREST_INDEX, emi.getInterest_component());
-            ps.setDouble(PRINCIPAL_INDEX, emi.getPrincipal_component());
-            ps.setDouble(OUTSTANDING_INDEX, emi.getOutstanding_balance());
+            ps.setDouble(INTEREST_INDEX, emi.getInterestComponent());
+            ps.setDouble(PRINCIPAL_INDEX, emi.getPrincipalComponent());
+            ps.setDouble(OUTSTANDING_INDEX, emi.getOutstandingBalance());
             ps.setDate(DUE_DATE_INDEX, Date.valueOf(emi.getDueDate()));
             ps.setString(STATUS_INDEX, emi.getStatus());
 
@@ -113,8 +114,8 @@ public class EmiDao {
         try (PreparedStatement ps =
                      con.prepareStatement(UPDATE_STATUS)) {
 
-            ps.setString(1, status);
-            ps.setLong(2, emiId);
+            ps.setString(UPDATE_LOAN_STATUS_IDX, status);
+            ps.setLong(UPDATE_LOAN_EMIID_IDX, emiId);
 
             int rows = ps.executeUpdate();
             if (rows == 0) {
@@ -128,17 +129,17 @@ public class EmiDao {
 
 
 
-    private Emi mapRow(ResultSet rs) throws SQLException {
+    private static Emi mapRow(ResultSet rs) throws SQLException {
 
         Emi emi = new Emi();
         emi.setEmiId(rs.getLong("emiId"));
         emi.setLoanId(rs.getLong("loanId"));
         emi.setEmiAmount(rs.getDouble("emi_amount"));
-        emi.setInterest_component(
+        emi.setInterestComponent(
                 rs.getDouble("interest_component"));
-        emi.setPrincipal_component(
+        emi.setPrincipalComponent(
                 rs.getDouble("principal_component"));
-        emi.setOutstanding_balance(
+        emi.setOutstandingBalance(
                 rs.getDouble("outstanding_balance"));
         emi.setDueDate(
                 rs.getDate("due_date").toLocalDate());

@@ -7,9 +7,9 @@ public class Emi {
     private Long emiId;
     private Long loanId;
     private double emiAmount;
-    private double interest_component;
-    private double principal_component;
-    private double outstanding_balance;
+    private double interestComponent;
+    private double principalComponent;
+    private double outstandingBalance;
     private LocalDate dueDate;
     private String status;
 
@@ -19,17 +19,17 @@ public class Emi {
     public Emi(Long emiId,
                Long loanId,
                double emiAmount,
-               double interest_component,
-               double principal_component,
-               double outstanding_balance,
+               double interestComponent,
+               double principalComponent,
+               double outstandingBalance,
                LocalDate dueDate,
                String status) {
         this.emiId = emiId;
         this.loanId = loanId;
         this.emiAmount = emiAmount;
-        this.interest_component = interest_component;
-        this.principal_component = principal_component;
-        this.outstanding_balance = outstanding_balance;
+        this.interestComponent = interestComponent;
+        this.principalComponent = principalComponent;
+        this.outstandingBalance = outstandingBalance;
         this.dueDate = dueDate;
         this.status = status;
     }
@@ -58,28 +58,28 @@ public class Emi {
         this.emiAmount = emiAmount;
     }
 
-    public double getInterest_component() {
-        return interest_component;
+    public double getInterestComponent() {
+        return interestComponent;
     }
 
-    public void setInterest_component(double interest_component) {
-        this.interest_component = interest_component;
+    public void setInterestComponent(double interestComponent) {
+        this.interestComponent = interestComponent;
     }
 
-    public double getPrincipal_component() {
-        return principal_component;
+    public double getPrincipalComponent() {
+        return principalComponent;
     }
 
-    public void setPrincipal_component(double principal_component) {
-        this.principal_component = principal_component;
+    public void setPrincipalComponent(double principalComponent) {
+        this.principalComponent = principalComponent;
     }
 
-    public double getOutstanding_balance() {
-        return outstanding_balance;
+    public double getOutstandingBalance() {
+        return outstandingBalance;
     }
 
-    public void setOutstanding_balance(double outstanding_balance) {
-        this.outstanding_balance = outstanding_balance;
+    public void setOutstandingBalance(double outstandingBalance) {
+        this.outstandingBalance = outstandingBalance;
     }
 
     public LocalDate getDueDate() {

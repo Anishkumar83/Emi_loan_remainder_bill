@@ -2,13 +2,12 @@ package org.emiloanwithbill.servlet.customerservlet;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.emiloanwithbill.dto.LoanResponseDto;
 import org.emiloanwithbill.model.Emi;
 import org.emiloanwithbill.model.Loan;
 import org.emiloanwithbill.service.LoanService;
 import org.emiloanwithbill.service.serviceimplementation.LoanServiceImplementation;
+import org.emiloanwithbill.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,16 +28,22 @@ public class LoanDetailsJsonServlet extends HttpServlet {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(LoanDetailsJsonServlet.class);
 
-    private final LoanService loanService = new LoanServiceImplementation();
+    private final LoanService loanService;
 
-    // Jackson ObjectMapper (thread-safe after config)
-    private static final ObjectMapper mapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule())
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    public LoanDetailsJsonServlet() {
+        this.loanService = new LoanServiceImplementation();
+    }
+
+    public LoanDetailsJsonServlet(LoanService loanService) {
+        this.loanService = loanService;
+    }
+
+
+    public static final ObjectMapper mapper = JsonUtil.getMapper();
 
     @Override
-    protected void doGet(HttpServletRequest req,
-                         HttpServletResponse resp)
+    public void doGet(HttpServletRequest req,
+                      HttpServletResponse resp)
             throws IOException {
 
         resp.setContentType("application/json");
