@@ -1,4 +1,4 @@
-package org.emiloanwithbill.servlet.customerservlet;
+package org.emiloanwithbill.servlet;
 
 import org.emiloanwithbill.dao.CustomerDao;
 import org.emiloanwithbill.model.Customer;

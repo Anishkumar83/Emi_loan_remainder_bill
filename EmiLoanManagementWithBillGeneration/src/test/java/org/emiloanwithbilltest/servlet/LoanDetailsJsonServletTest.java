@@ -6,7 +6,7 @@ import org.emiloanwithbill.dto.LoanResponseDto;
 import org.emiloanwithbill.model.Emi;
 import org.emiloanwithbill.model.Loan;
 import org.emiloanwithbill.service.LoanService;
-import org.emiloanwithbill.servlet.customerservlet.LoanDetailsJsonServlet;
+import org.emiloanwithbill.servlet.LoanDetailsJsonServlet;
 import org.emiloanwithbill.util.JsonUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -4,7 +4,7 @@ package org.emiloanwithbilltest.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.emiloanwithbill.model.Customer;
 import org.emiloanwithbill.service.CustomerService;
-import org.emiloanwithbill.servlet.customerservlet.CustomerServlet;
+import org.emiloanwithbill.servlet.CustomerServlet;
 import org.emiloanwithbill.util.JsonUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

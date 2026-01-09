@@ -2,7 +2,7 @@ package org.emiloanwithbilltest.servlet;
 
 
 import org.emiloanwithbill.service.LoanService;
-import org.emiloanwithbill.servlet.customerservlet.LoanCreateServlet;
+import org.emiloanwithbill.servlet.LoanCreateServlet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

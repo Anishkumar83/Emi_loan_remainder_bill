@@ -1,4 +1,4 @@
-package org.emiloanwithbill.servlet.customerservlet;
+package org.emiloanwithbill.servlet;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
