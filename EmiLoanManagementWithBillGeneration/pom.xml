@@ -90,6 +90,11 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.emiruleengine</groupId>
+            <artifactId>EmiRuleEngine</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 

@@ -14,10 +14,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void register(User user) {
-        // hash password here (business logic)
-        String hashed = PasswordUtil.hashPassword(user.getPassword());
-        user.setPassword(hashed);
+        if (userDao.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
 
+        user.setPassword(PasswordUtil.hashPassword(user.getPassword()));
         userDao.insertUser(user);
     }
 }

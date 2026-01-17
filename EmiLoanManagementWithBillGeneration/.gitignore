@@ -9,9 +9,11 @@ target/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea
 *.iws
 *.iml
 *.ipr
+
 
 ### Eclipse ###
 .apt_generated
@@ -31,6 +33,8 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+logs
 
 ### VS Code ###
 .vscode/
