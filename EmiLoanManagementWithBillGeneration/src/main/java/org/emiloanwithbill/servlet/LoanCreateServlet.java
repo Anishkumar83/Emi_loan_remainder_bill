@@ -1,13 +1,11 @@
 package org.emiloanwithbill.servlet;
 
-
 import org.emiloanwithbill.service.LoanService;
 import org.emiloanwithbill.service.serviceimplementation.LoanServiceImplementation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +13,6 @@ import java.io.IOException;
 import java.io.Serial;
 import java.math.BigDecimal;
 
-@WebServlet("/loan/create")
 public class LoanCreateServlet extends HttpServlet {
 
     @Serial
@@ -24,9 +21,9 @@ public class LoanCreateServlet extends HttpServlet {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(LoanCreateServlet.class);
 
-    private static final String MISSING_PARAMETER="Missing parameter: ";
+    private static final String MISSING_PARAMETER = "Missing parameter: ";
 
-    private final LoanService loanService ;
+    private final LoanService loanService;
 
     public LoanCreateServlet() {
         this.loanService = new LoanServiceImplementation();
@@ -36,57 +33,50 @@ public class LoanCreateServlet extends HttpServlet {
         this.loanService = loanService;
     }
 
-
     @Override
     public void doPost(HttpServletRequest req,
                        HttpServletResponse resp)
             throws ServletException, IOException {
 
-        LOGGER.info("Loan create request received");
+        LOGGER.info("POST /loan/create");
 
         try {
+            long userId = (long) req.getAttribute("userId");
+
             long customerId = parseLong(req, "cus_id");
+
+
+            if (!loanService.isCustomerOwnedByUser(customerId, userId)) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN,
+                        "You are not authorized to create loan for this customer");
+                return;
+            }
+
             BigDecimal principal = parseBigDecimal(req, "principal");
             BigDecimal rate = parseBigDecimal(req, "rate");
             int months = parseInt(req, "months");
 
             long loanId =
-                    loanService.createLoan(
-                            customerId, principal, rate, months);
+                    loanService.createLoan(customerId, principal, rate, months);
 
             resp.setStatus(HttpServletResponse.SC_CREATED);
-            resp.getWriter()
-                    .write("Loan created successfully. LoanId=" + loanId);
+            resp.getWriter().write("Loan created successfully. LoanId=" + loanId);
 
         } catch (IllegalArgumentException e) {
             LOGGER.warn("Invalid loan request: {}", e.getMessage());
-            try {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                        e.getMessage());
-            }catch (IOException ex){
-                LOGGER.error("Error sending loan request: {}", ex.getMessage());
-            }
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 
         } catch (Exception e) {
             LOGGER.error("Loan creation failed", e);
-            try {
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        "Failed to create loan");
-            }catch (IOException ex){
-                LOGGER.error("Error sending loan failed: {}", ex.getMessage());
-            }
-
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "Failed to create loan");
         }
     }
-
-
-
 
     private static long parseLong(HttpServletRequest req, String param) {
         String value = req.getParameter(param);
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException(
-                    MISSING_PARAMETER + param);
+            throw new IllegalArgumentException(MISSING_PARAMETER + param);
         }
         return Long.parseLong(value);
     }
@@ -94,8 +84,7 @@ public class LoanCreateServlet extends HttpServlet {
     private static int parseInt(HttpServletRequest req, String param) {
         String value = req.getParameter(param);
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException(
-                    MISSING_PARAMETER + param);
+            throw new IllegalArgumentException(MISSING_PARAMETER + param);
         }
         return Integer.parseInt(value);
     }
@@ -103,8 +92,7 @@ public class LoanCreateServlet extends HttpServlet {
     private static BigDecimal parseBigDecimal(HttpServletRequest req, String param) {
         String value = req.getParameter(param);
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException(
-                    MISSING_PARAMETER+ param);
+            throw new IllegalArgumentException(MISSING_PARAMETER + param);
         }
         return new BigDecimal(value);
     }

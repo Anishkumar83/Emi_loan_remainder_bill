@@ -6,7 +6,7 @@
             http://www.liquibase.org/xml/ns/dbchangelog
             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="001" author="anish">
+    <changeSet id="002" author="anish">
 
         <createTable tableName="customers">
 
@@ -14,6 +14,10 @@
                 <constraints primaryKey="true"
                              primaryKeyName="pk_customer"
                              nullable="false"/>
+            </column>
+
+            <column name="user_id" type="BIGINT" >
+                <constraints nullable="false"/>
             </column>
 
             <column name="firstName" type="VARCHAR(100)">
@@ -42,7 +46,14 @@
                     defaultValueComputed="CURRENT_TIMESTAMP"/>
 
         </createTable>
-
+        <addForeignKeyConstraint
+                baseTableName="customers"
+                baseColumnNames="user_id"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                constraintName="fk_user_id"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
 
         <sql>
             ALTER TABLE customers

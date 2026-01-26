@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>EMI Reminder Notice</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f3f6fa;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        .wrapper {
+            max-width: 700px;
+            margin: 35px auto;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.1);
+            padding: 35px 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h2 {
+            color: #1a73e8;
+            font-size: 26px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .content p {
+            line-height: 1.7;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .highlight-box {
+            background-color: #fff2cd;
+            border-left: 5px solid #f4b400;
+            padding: 12px 15px;
+            margin: 20px 0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 28px;
+            background-color: #1a73e8;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            margin-top: 22px;
+        }
+
+        .footer {
+            margin-top: 35px;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <div class="header">
+        <h2>EMI Payment Reminder</h2>
+        <p>Your monthly EMI bill has been generated.</p>
+    </div>
+
+    <div class="content">
+        <p>Dear <strong>{{USERNAME}}</strong>,</p>
+
+        <p>
+            This is a friendly reminder that your <strong>monthly EMI</strong> is due soon.
+            Please check the attached password-protected PDF to view the full EMI details.
+        </p>
+
+        <p>
+            <strong>Due Date:</strong> {{DUE_DATE}}
+        </p>
+
+        <!-- PASSWORD NOTICE -->
+        <div class="highlight-box">
+            <strong>Your EMI Bill PDF is password protected.</strong><br>
+            Use your Date of Birth in <strong>DDMMYYYY</strong> format to open the file.
+        </div>
+
+        <p>
+            Please ensure timely payment to avoid late fees.
+            You may use the button below to access your loan portal:
+        </p>
+
+        <a href="#" class="cta-button">Access Loan Portal</a>
+
+        <p>
+            For assistance, feel free to contact our support team.
+        </p>
+    </div>
+
+    <div class="footer">
+        <p>This is an automated message. Please do not reply.</p>
+        <p>&copy; {{YEAR}} Finance Corp. All Rights Reserved.</p>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,9 +1,11 @@
 package org.emiloanwithbill.service.serviceimplementation;
 
 import org.emiloanwithbill.config.DbConnection;
+import org.emiloanwithbill.dao.CustomerDao;
 import org.emiloanwithbill.dao.EmiDao;
 import org.emiloanwithbill.dao.LoanDao;
 import org.emiloanwithbill.exception.DataException;
+import org.emiloanwithbill.model.Customer;
 import org.emiloanwithbill.model.Emi;
 import org.emiloanwithbill.model.Loan;
 import org.emiloanwithbill.service.LoanService;
@@ -27,6 +29,7 @@ public class LoanServiceImplementation implements LoanService {
 
     private final LoanDao loanDao;
     private final EmiDao emiDao;
+    private final CustomerDao customerDao = new CustomerDao();
 
     public LoanServiceImplementation() {
         this.loanDao = new LoanDao();
@@ -39,10 +42,7 @@ public class LoanServiceImplementation implements LoanService {
     }
 
     @Override
-    public long createLoan(long customerId,
-                           BigDecimal principal,
-                           BigDecimal rate,
-                           int months) {
+    public long createLoan(long customerId, BigDecimal principal, BigDecimal rate, int months) {
 
         Connection con = null;
 
@@ -60,16 +60,11 @@ public class LoanServiceImplementation implements LoanService {
 
             loanDao.insert(con, loan);
 
-            createEmiSchedule(con,
-                    loan.getLoanId(),
-                    principal,
-                    rate,
-                    months);
+            createEmiSchedule(con, loan.getLoanId(), principal, rate, months);
 
             con.commit();
 
-            LOGGER.info("Loan created successfully loanId={}",
-                    loan.getLoanId());
+            LOGGER.info("Loan created successfully loanId={}", loan.getLoanId());
 
             return loan.getLoanId();
 
@@ -82,11 +77,7 @@ public class LoanServiceImplementation implements LoanService {
         }
     }
 
-
-    private static void validate(long customerId,
-                          BigDecimal principal,
-                          BigDecimal rate,
-                          int months) {
+    private static void validate(long customerId, BigDecimal principal, BigDecimal rate, int months) {
 
         if (customerId <= 0)
             throw new IllegalArgumentException("Invalid customerId");
@@ -104,8 +95,7 @@ public class LoanServiceImplementation implements LoanService {
                                    BigDecimal rate,
                                    int months) {
 
-        BigDecimal emiAmount =
-                EmiCalculation.emiCalculation(principal, rate, months);
+        BigDecimal emiAmount = EmiCalculation.emiCalculation(principal, rate, months);
 
         BigDecimal balance = principal;
         BigDecimal monthlyRate =
@@ -124,9 +114,7 @@ public class LoanServiceImplementation implements LoanService {
                     emiAmount.subtract(interest)
                             .setScale(SCALE, RoundingMode.HALF_UP);
 
-            balance =
-                    balance.subtract(principalPaid)
-                            .max(BigDecimal.ZERO);
+            balance = balance.subtract(principalPaid).max(BigDecimal.ZERO);
 
             Emi emi = new Emi();
             emi.setLoanId(loanId);
@@ -152,7 +140,6 @@ public class LoanServiceImplementation implements LoanService {
         }
     }
 
-
     private static void close(Connection con) {
         try {
             if (con != null) {
@@ -162,7 +149,6 @@ public class LoanServiceImplementation implements LoanService {
             throw new DataException("Close failed", e);
         }
     }
-
 
     @Override
     public Loan getLoanById(long loanId) {
@@ -174,12 +160,32 @@ public class LoanServiceImplementation implements LoanService {
     }
 
     @Override
-    public List<Emi> getEmiSchedule(long loanId) {
+    public List<Emi> getEmiSchedule(long loanId, int page, int size) {
         try (Connection con = DbConnection.getConnection()) {
-            return emiDao.getEmiByLoanId(con, loanId);
+            return emiDao.getEmiByLoanIdPaginated(con, loanId, page, size);
         } catch (Exception e) {
             throw new DataException("Failed to fetch EMI schedule", e);
         }
     }
 
+    @Override
+    public boolean isCustomerOwnedByUser(long customerId, long userId) {
+        Customer customer = customerDao.getByCustomerId(customerId);
+        return customer != null && customer.getUser_id() == userId;
+    }
+
+    @Override
+    public boolean isLoanOwnedByUser(long loanId, long userId) {
+        try (Connection con = DbConnection.getConnection()) {
+
+            Loan loan = loanDao.getByLoanId(con, loanId);
+            if (loan == null) return false;
+
+            Customer customer = customerDao.getByCustomerId(loan.getCustomerId());
+            return customer != null && customer.getUser_id() == userId;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Ownership check failed", e);
+        }
+    }
 }

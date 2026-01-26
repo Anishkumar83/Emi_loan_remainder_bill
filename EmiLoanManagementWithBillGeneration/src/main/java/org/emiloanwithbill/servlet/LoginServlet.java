@@ -2,57 +2,61 @@ package org.emiloanwithbill.servlet;
 
 import org.emiloanwithbill.dao.UserDao;
 import org.emiloanwithbill.model.User;
+import org.emiloanwithbill.service.UserService;
+import org.emiloanwithbill.service.serviceimplementation.UserServiceImpl;
 import org.emiloanwithbill.util.JsonUtil;
-import org.emiloanwithbill.util.PasswordUtil;
-import org.emiloanwithbill.util.TokenService;
+import org.emiloanwithbill.util.JwtUtil;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/login", asyncSupported = true)
 public class LoginServlet extends HttpServlet {
 
-    private final UserDao userDao = new UserDao();
+    private final UserService userService = new UserServiceImpl(new UserDao());
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        User user = JsonUtil.getMapper().readValue(req.getReader(), User.class);
-        User dbUser = userDao.findByUsername(user.getUsername());
+        try {
+
+            User loginReq = JsonUtil.getMapper().readValue(req.getReader(), User.class);
 
 
-        if (dbUser == null ||
-                !PasswordUtil.verifyPassword(user.getPassword(), dbUser.getPassword())) {
+            User dbUser = userService.login(loginReq.getUsername(), loginReq.getPassword());
 
-            resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid credentials");
-            return;
+            if (dbUser == null) {
+                resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
+                return;
+            }
+
+            long userId = dbUser.getId();
+            String role = dbUser.getRole();
+            String username = dbUser.getUsername();
+
+
+            String accessToken = JwtUtil.generateAccessToken(userId, username, role);
+            String refreshToken = JwtUtil.generateRefreshToken(userId, username);
+
+
+            HttpSession session = req.getSession(true);
+            session.setAttribute("userId", userId);
+            session.setAttribute("role", role);
+            session.setMaxInactiveInterval(3600);
+
+
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+
+            resp.getWriter().write(
+                    "{\n" +
+                            "  \"message\": \"Login successful\",\n" +
+                            "  \"accessToken\": \"" + accessToken + "\",\n" +
+                            "  \"refreshToken\": \"" + refreshToken + "\"\n" +
+                            "}"
+            );
+
+        } catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request format");
         }
-
-
-        var asyncContext = req.startAsync();
-        asyncContext.setTimeout(5000);
-
-        TokenService.generateTokenAsync(dbUser.getUsername())
-                .thenAccept(token -> {
-                    try {
-                        HttpServletResponse asyncResp =
-                                (HttpServletResponse) asyncContext.getResponse();
-
-                        asyncResp.setContentType("application/json");
-                        asyncResp.setHeader("Authorization", "Bearer " + token);
-                        asyncResp.getWriter()
-                                .write("{\"message\":\"login successful\"}");
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        asyncContext.complete();
-                    }
-                });
     }
 }

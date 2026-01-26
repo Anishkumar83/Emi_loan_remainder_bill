@@ -28,6 +28,8 @@ public class EmiDao {
     private static final int UPDATE_LOAN_STATUS_IDX = 1;
     private static final int UPDATE_LOAN_EMIID_IDX = 2;
 
+    private static final int PAGINATION_LIMIT_INDEX = 2;
+    private static final int PAGINATION_OFFSET_INDEX = 3;
 
 
     private static final String INSERT = """
@@ -38,20 +40,51 @@ public class EmiDao {
         VALUES (?, ?, ?, ?, ?, ?, ?)
         """;
 
-    private static final String SELECT_BY_LOAN_ID = """
+    private static final String SELECT_BY_LOAN_ID_PAGINATED = """
         SELECT "emiId", "loanId", "emi_amount",
                "interest_component", "principal_component",
                "outstanding_balance", "due_date", "status"
         FROM emi_schedule
         WHERE "loanId" = ?
         ORDER BY "due_date"
+        LIMIT ? OFFSET ?
         """;
+
 
     private static final String UPDATE_STATUS = """
         UPDATE emi_schedule
         SET "status" = ?
         WHERE "emiId" = ?
         """;
+
+    private static final String SELECT_EMI_BY_ID = """
+    SELECT "emiId", "loanId", "emi_amount",
+           "interest_component", "principal_component",
+           "outstanding_balance", "due_date", "status"
+    FROM emi_schedule
+    WHERE "emiId" = ?
+""";
+
+    public Emi getEmiById(Connection con, long emiId) {
+
+        LOGGER.info("Fetching EMI details for emiId={}", emiId);
+
+        try (PreparedStatement ps = con.prepareStatement(SELECT_EMI_BY_ID)) {
+
+            ps.setLong(1, emiId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return mapRow(rs);
+            }
+
+            LOGGER.warn("No EMI found for emiId={}", emiId);
+            return null;
+
+        } catch (SQLException e) {
+            throw new DataException("Fetch EMI by ID failed", e);
+        }
+    }
 
 
     public void saveEmi(Connection con, Emi emi) {
@@ -80,15 +113,20 @@ public class EmiDao {
     }
 
 
-    public List<Emi> getEmiByLoanId(Connection con, long loanId) {
+    public List<Emi> getEmiByLoanIdPaginated(Connection con, long loanId, int page, int size) {
 
-        LOGGER.info("Fetching EMI schedule for loanId={}", loanId);
+        LOGGER.info("Fetching paginated EMI schedule for loanId={}, page={}, size={}", loanId, page, size);
         List<Emi> emis = new ArrayList<>();
 
-        try (PreparedStatement ps =
-                     con.prepareStatement(SELECT_BY_LOAN_ID)) {
+        int offset = (page - 1) * size;
 
-            ps.setLong(1, loanId);
+        try (PreparedStatement ps =
+                     con.prepareStatement(SELECT_BY_LOAN_ID_PAGINATED)) {
+
+            ps.setLong(LOAN_ID_INDEX, loanId);
+            ps.setInt(PAGINATION_LIMIT_INDEX, size);
+            ps.setInt(PAGINATION_OFFSET_INDEX, offset);
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -101,8 +139,6 @@ public class EmiDao {
 
         return emis;
     }
-
-
 
     public void updateStatus(Connection con,
                              long emiId,

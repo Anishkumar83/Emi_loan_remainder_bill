@@ -1,8 +1,24 @@
-2026-01-17 07:16:10 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-01-17 07:16:10 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@8113ea7
-2026-01-17 07:16:10 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-01-17 07:16:11 INFO  org.emiloanwithbill.service.serviceimplementation.LoanServiceImplementation - Loan created successfully loanId=1
-2026-01-17 07:30:37 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-01-17 07:30:38 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3e0e3048
-2026-01-17 07:30:38 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-01-17 07:30:39 INFO  org.emiloanwithbill.service.serviceimplementation.LoanServiceImplementation - Loan created successfully loanId=1
+2026-01-25 11:24:00 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-25 11:24:01 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@46c19350
+2026-01-25 11:24:01 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-25 11:24:07 INFO  org.emiloanwithbill.service.serviceimplementation.LoanServiceImplementation - Loan created successfully loanId=1
+2026-01-25 11:47:51 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-25 11:47:51 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@293ba26c
+2026-01-25 11:47:51 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-25 11:47:58 INFO  org.emiloanwithbill.service.serviceimplementation.LoanServiceImplementation - Loan created successfully loanId=1
+2026-01-25 12:16:34 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-25 12:16:35 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@293ba26c
+2026-01-25 12:16:35 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-25 12:16:39 INFO  org.emiloanwithbill.service.serviceimplementation.LoanServiceImplementation - Loan created successfully loanId=1
+2026-01-25 12:17:37 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-25 12:17:37 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@27bc2650
+2026-01-25 12:17:37 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-25 12:17:42 INFO  org.emiloanwithbill.service.serviceimplementation.LoanServiceImplementation - Loan created successfully loanId=1
+2026-01-25 12:36:00 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-25 12:36:01 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@46c19350
+2026-01-25 12:36:01 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-25 12:36:06 INFO  org.emiloanwithbill.service.serviceimplementation.LoanServiceImplementation - Loan created successfully loanId=1
+2026-01-25 18:29:07 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-25 18:29:07 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@17873842
+2026-01-25 18:29:07 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-25 18:29:13 INFO  org.emiloanwithbill.service.serviceimplementation.LoanServiceImplementation - Loan created successfully loanId=1

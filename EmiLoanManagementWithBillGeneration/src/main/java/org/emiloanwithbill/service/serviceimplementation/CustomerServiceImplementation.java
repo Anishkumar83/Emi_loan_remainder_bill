@@ -25,9 +25,15 @@ public class CustomerServiceImplementation implements CustomerService {
     }
 
     @Override
+    public List<Customer> getAllByUserId(long userId) {
+        return customerDao.getCustomersByUserId(userId);
+    }
+
+    @Override
     public Customer getCustomerById(long id) {
         return customerDao.getByCustomerId(id);
     }
+
     @Override
     public void updateCustomer(Customer customer) {
         customerDao.update(customer);

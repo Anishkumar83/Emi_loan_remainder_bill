@@ -158,10 +158,10 @@ class LoanServiceImplementationTest {
 
             mocked.when(DbConnection::getConnection).thenReturn(connection);
             doNothing().when(connection).close();
-            when(emiDao.getEmiByLoanId(connection, 1L))
+            when(emiDao.getEmiByLoanIdPaginated(connection, 1L,1,5))
                     .thenReturn(List.of(new Emi()));
 
-            List<Emi> emis = loanService.getEmiSchedule(1L);
+            List<Emi> emis = loanService.getEmiSchedule(1L,1,5);
 
             assertEquals(1, emis.size());
             verify(connection).close();
@@ -176,7 +176,7 @@ class LoanServiceImplementationTest {
                     .thenThrow(new RuntimeException());
 
             assertThrows(DataException.class,
-                    () -> loanService.getEmiSchedule(1L));
+                    () -> loanService.getEmiSchedule(1L,1,1));
         }
     }
 }

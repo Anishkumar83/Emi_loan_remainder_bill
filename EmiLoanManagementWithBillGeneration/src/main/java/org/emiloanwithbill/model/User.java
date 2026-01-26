@@ -1,12 +1,18 @@
 package org.emiloanwithbill.model;
 
+import org.emiloanwithbill.annotations.PasswordRegex;
+
 public class User {
 
     private long id;
     private String username;
+    @PasswordRegex(
+            regex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#\\$%\\^&\\+=!]).{8,}$",
+            message = "Password must contain 8 chars, 1 upper, 1 lower, 1 digit, 1 symbol!"
+    )
     private String password;
-    private String role;
 
+    private String role;
     public User() {}
 
     public User(long id, String username, String password, String role) {

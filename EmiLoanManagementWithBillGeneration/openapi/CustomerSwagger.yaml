@@ -1,0 +1,173 @@
+openapi: 3.0.1
+
+info:
+  title: EMI Loan Management API
+  version: 1.0.0
+  description: >
+    API documentation for EMI Loan Billing system.
+
+servers:
+  - url: http://localhost:8080/emi-bill-app
+
+paths:
+
+  /customer:
+    post:
+      summary: Create a new customer
+      description: Adds a new customer using JSON request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+            example:
+              user_id: 1
+              firstName: "Anish"
+              lastName: "Kumar"
+              email: "anish@example.com"
+              dob: "2000-05-12"
+              address: "Chennai, Tamil Nadu"
+              gender: "MALE"
+      responses:
+        '201':
+          description: Customer created successfully
+        '400':
+          description: Invalid JSON request body
+        '500':
+          description: Internal server error
+
+    get:
+      summary: Get customers
+      description: >
+        - Without `id` → Returns all customers  
+        - With `id` → Returns a specific customer
+      parameters:
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: Customer ID (optional)
+      responses:
+        '200':
+          description: Customer(s) retrieved successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Customer'
+                  - $ref: '#/components/schemas/Customer'
+        '400':
+          description: Invalid request
+        '404':
+          description: Customer not found
+        '500':
+          description: Internal server error
+
+    put:
+      summary: Update an existing customer
+      description: Updates customer details using JSON request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+            example:
+              customerId: 101
+              user_id: 1
+              firstName: "Anish"
+              lastName: "Kumar"
+              email: "anish@example.com"
+              dob: "2000-05-12"
+              address: "Updated Address"
+              gender: "MALE"
+      responses:
+        '200':
+          description: Customer updated successfully
+        '400':
+          description: Invalid request body
+        '500':
+          description: Internal server error
+
+    delete:
+      summary: Delete a customer
+      description: Deletes a customer using customer ID in query parameter.
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Customer ID to delete
+      responses:
+        '200':
+          description: Customer deleted successfully
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
+
+
+components:
+  schemas:
+
+    Customer:
+      type: object
+      description: Customer details for CRUD operations.
+      properties:
+        customerId:
+          type: integer
+          format: int64
+          example: 101
+          description: Auto-generated Customer ID (required for update/delete)
+
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+          description: ID of the associated User
+
+        firstName:
+          type: string
+          example: "Anish"
+
+        lastName:
+          type: string
+          example: "Kumar"
+
+        email:
+          type: string
+          format: email
+          example: "anish@example.com"
+
+        dob:
+          type: string
+          format: date
+          example: "2000-05-12"
+
+        address:
+          type: string
+          example: "Chennai, Tamil Nadu"
+
+        gender:
+          type: string
+          enum:
+            - MALE
+            - FEMALE
+            - OTHER
+          example: "MALE"
+
+      required:
+        - firstName
+        - lastName
+        - email
+        - dob
+        - address
+        - gender
+        - user_id

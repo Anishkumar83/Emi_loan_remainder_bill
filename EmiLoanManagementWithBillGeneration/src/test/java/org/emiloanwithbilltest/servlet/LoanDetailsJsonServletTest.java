@@ -67,7 +67,7 @@ class LoanDetailsJsonServletTest {
         emi.setStatus("PENDING");
 
         when(loanService.getLoanById(1L)).thenReturn(loan);
-        when(loanService.getEmiSchedule(1L)).thenReturn(List.of(emi));
+        when(loanService.getEmiSchedule(1L,1,5)).thenReturn(List.of(emi));
 
         servlet.doGet(request, response);
 

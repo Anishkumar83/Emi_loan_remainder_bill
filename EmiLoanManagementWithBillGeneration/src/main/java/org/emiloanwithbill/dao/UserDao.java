@@ -40,7 +40,9 @@ public class UserDao {
     }
 
     public User findByUsername(String username) {
-        String sql = "SELECT id, username, password_hash, role FROM users WHERE username = ?";
+        String sql =
+                "SELECT id, username, password_hash, role FROM users WHERE username = ?";
+
         try (Connection con = DbConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 

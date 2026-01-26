@@ -5,6 +5,16 @@
     <property name="LOG_PATTERN"
               value="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger - %msg%n"/>
 
+    <!-- =========================
+         Console Appender (NEW)
+       ========================= -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
     <appender name="APP_FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/application.log</file>
@@ -36,7 +46,6 @@
     </appender>
 
 
-
     <appender name="ERROR_FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/error.log</file>
@@ -64,6 +73,7 @@
             additivity="false">
         <appender-ref ref="CUSTOMER_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="CONSOLE"/>   <!-- NEW -->
     </logger>
 
     <logger name="org.emiloanwithbill.servlet"
@@ -71,9 +81,11 @@
             additivity="false">
         <appender-ref ref="CUSTOMER_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="CONSOLE"/>   <!-- NEW -->
     </logger>
 
     <root level="INFO">
+        <appender-ref ref="CONSOLE"/>     <!-- NEW -->
         <appender-ref ref="APP_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
     </root>

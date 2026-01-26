@@ -96,7 +96,7 @@ class EmiDaoTest {
                 .thenReturn(Date.valueOf(LocalDate.now()));
         when(resultSet.getString("status")).thenReturn("PENDING");
 
-        List<Emi> result = emiDao.getEmiByLoanId(connection, 10L);
+        List<Emi> result = emiDao.getEmiByLoanIdPaginated(connection, 10L,1,5);
 
         assertEquals(1, result.size());
         assertEquals(10L, result.get(0).getLoanId());
@@ -110,7 +110,7 @@ class EmiDaoTest {
                 .thenThrow(SQLException.class);
 
         assertThrows(DataException.class, () ->
-                emiDao.getEmiByLoanId(connection, 10L));
+                emiDao.getEmiByLoanIdPaginated(connection, 10L,1,5));
     }
 
     @Test

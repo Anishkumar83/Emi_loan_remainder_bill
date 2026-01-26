@@ -6,7 +6,7 @@
             http://www.liquibase.org/xml/ns/dbchangelog
             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet id="003" author="anishKumar">
+    <changeSet id="005" author="anishKumar">
 
         <createTable tableName="emi_schedule">
 

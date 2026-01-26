@@ -1,0 +1,212 @@
+openapi: 3.0.1
+
+info:
+  title: Loan Management API
+  version: 1.1.0
+  description: API documentation for loan creation, loan CRUD, and EMI schedule.
+
+servers:
+  - url: http://localhost:8080/emi-bill-app
+
+paths:
+
+  /loan/create:
+    post:
+      summary: Create a new loan
+      parameters:
+        - in: query
+          name: cus_id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: query
+          name: principal
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: rate
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: months
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Loan created successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Loan created successfully. LoanId=101"
+        '400':
+          description: Invalid or missing parameters
+        '500':
+          description: Loan creation failed
+
+  /loan/details/json:
+    get:
+      summary: Get loan details with EMI schedule
+      parameters:
+        - in: query
+          name: loanId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Loan with EMI schedule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoanResponseDto'
+        '400':
+          description: Missing loanId
+        '404':
+          description: Loan not found
+        '500':
+          description: Internal error
+
+  /loan:
+    get:
+      summary: Get loans
+      parameters:
+        - in: query
+          name: id
+          required: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Loan(s) retrieved
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Loan'
+                  - $ref: '#/components/schemas/Loan'
+        '400':
+          description: Invalid request
+        '404':
+          description: Loan not found
+
+    put:
+      summary: Update loan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Loan'
+      responses:
+        '200':
+          description: Loan updated
+        '400':
+          description: Invalid JSON
+        '500':
+          description: Update failed
+
+    delete:
+      summary: Delete loan
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Loan deleted
+        '400':
+          description: Invalid ID
+        '500':
+          description: Unable to delete loan
+
+components:
+  schemas:
+
+    Loan:
+      type: object
+      properties:
+        loanId:
+          type: integer
+          format: int64
+          example: 101
+        customerId:
+          type: integer
+          example: 1
+        principal:
+          type: number
+          example: 50000
+        interestRate:
+          type: number
+          example: 12.5
+        tenureMonths:
+          type: integer
+          example: 12
+      required:
+        - customerId
+        - principal
+        - interestRate
+        - tenureMonths
+
+    Emi:
+      type: object
+      properties:
+        emiId:
+          type: integer
+          format: int64
+          example: 501
+        loanId:
+          type: integer
+          format: int64
+          example: 101
+        emiAmount:
+          type: number
+          example: 4021.00
+        interestComponent:
+          type: number
+          example: 520.75
+        principalComponent:
+          type: number
+          example: 3500.25
+        outstandingBalance:
+          type: number
+          example: 46500.00
+        dueDate:
+          type: string
+          format: date
+          example: "2024-02-10"
+        status:
+          type: string
+          example: "PENDING"
+      required:
+        - loanId
+        - emiAmount
+        - interestComponent
+        - principalComponent
+        - outstandingBalance
+        - dueDate
+        - status
+
+    LoanResponseDto:
+      type: object
+      properties:
+        loan:
+          $ref: '#/components/schemas/Loan'
+        emis:
+          type: array
+          items:
+            $ref: '#/components/schemas/Emi'
+      required:
+        - loan
+        - emis

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <filter>
+        <filter-name>LoggingFilter</filter-name>
+        <filter-class>org.emiloanwithbill.filter.LoggingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoggingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>org.emiloanwithbill.filter.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/customer/*</url-pattern>
+        <url-pattern>/loan/*</url-pattern>
+        <url-pattern>/loan/details/*</url-pattern>
+        <url-pattern>/emi/*</url-pattern>
+        <url-pattern>/emi/status</url-pattern>
+    </filter-mapping>
+
+
+    <filter>
+        <filter-name>AuthorizationFilter</filter-name>
+        <filter-class>org.emiloanwithbill.filter.AuthorizationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthorizationFilter</filter-name>
+        <url-pattern>/customer/*</url-pattern>
+        <url-pattern>/loan/*</url-pattern>
+        <url-pattern>/loan/details/*</url-pattern>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+
+
+    <servlet>
+        <servlet-name>CustomerServlet</servlet-name>
+        <servlet-class>org.emiloanwithbill.servlet.CustomerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CustomerServlet</servlet-name>
+        <url-pattern>/customer</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>EmiPaidServlet</servlet-name>
+        <servlet-class>org.emiloanwithbill.servlet.EmiPaidServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EmiPaidServlet</servlet-name>
+        <url-pattern>/emi/status</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>LoanCreateServlet</servlet-name>
+        <servlet-class>org.emiloanwithbill.servlet.LoanCreateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoanCreateServlet</servlet-name>
+        <url-pattern>/loan/create</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>LoanDetailsJsonServlet</servlet-name>
+        <servlet-class>org.emiloanwithbill.servlet.LoanDetailsJsonServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoanDetailsJsonServlet</servlet-name>
+        <url-pattern>/loan/details/json</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>org.emiloanwithbill.servlet.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/auth/login</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>org.emiloanwithbill.servlet.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>/RegisterServlet</servlet-name>
+         <servlet-class>org.emiloanwithbill.servlet.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+
+</web-app>

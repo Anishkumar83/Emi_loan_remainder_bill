@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 public class Customer {
     private long customerId;
+    private long user_id;
     private String firstName;
     private String lastName;
     private String email;
@@ -20,7 +21,7 @@ public class Customer {
     }
 
     public Customer(long customerId, String firstName, String lastName,
-                    String email, LocalDate dob, String address, Gender gender) {
+                    String email, LocalDate dob, String address, Gender gender, long userId) {
         this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,6 +29,7 @@ public class Customer {
         this.dob = dob;
         this.address = address;
         this.gender = gender;
+        this.user_id = userId;
     }
 
     public long getCustomerId() {
@@ -84,5 +86,13 @@ public class Customer {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(long user_id) {
+        this.user_id = user_id;
     }
 }

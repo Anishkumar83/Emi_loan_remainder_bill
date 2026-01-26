@@ -1,20 +1,23 @@
 package org.emiloanwithbill.util;
 
-import java.security.MessageDigest;
-import java.util.Base64;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class PasswordUtil {
+
+
     public static String hashPassword(String password) {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hashed = md.digest(password.getBytes());
-            return Base64.getEncoder().encodeToString(hashed);
+            return BCrypt.hashpw(password, BCrypt.gensalt());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error hashing password", e);
         }
     }
 
     public static boolean verifyPassword(String raw, String storedHash) {
-        return hashPassword(raw).equals(storedHash);
+        try {
+            return BCrypt.checkpw(raw, storedHash);
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

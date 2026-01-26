@@ -10,5 +10,6 @@
     <include file="src/main/resources/changelog/create-customer-table.xml"/>
     <include file="src/main/resources/changelog/create-loan-table.xml"/>
     <include file="src/main/resources/changelog/create-emi_schedule-table.xml"/>
+    <include file="src/main/resources/changelog/create-email-audit-table.xml"/>
 
 </databaseChangeLog>
