@@ -1,5 +1,5 @@
 
-**Refer README file here** 
+**Created docs as Astro Starlight docs ** 
 ---
 
-(https://emi-docs.vercel.app/)
+https://emi-docs.vercel.app/
